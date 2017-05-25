@@ -1,0 +1,189 @@
+This is the wechat image with Flask
+
+07/05/15
+
+[Done] figure out importing xml tool
+[Done]parse the incoming xml
+[Done]add try catch block around xml parsing
+[Done]add the rest of the page from SAE
+[Done]figure out SVN stuff
+[not easy]use lxml to parse incoming xml
+[Done]
+[Done]use logging tool and how SAE logging works: SAE loggs>=Warning. search under "debug" on the logging panel.
+[Done]get wechat to work with wechatimg, send msg on app to WePicture and get response. So far, seems there isn't sending message to SAE
+[Done]ImportError: dlopen(/Users/mqiao/python-G/NewFlaskApp/venv/lib/python2.7/site-packages/_mysql.so, 2): Library not loaded: libmysqlclient.18.dylib
+  Referenced from: /Users/mqiao/python-G/NewFlaskApp/venv/lib/python2.7/site-packages/_mysql.so
+  Reason: image not found
+  http://stackoverflow.com/questions/6383310/python-mysqldb-library-not-loaded-libmysqlclient-18-dylib
+[Done]find out why encoding doesn't work for testwithdb.py (MySQLdb)
+    I think I know. it is getting the right data, maybe just not displaying it correctly in terminal. u vs regular string type of deal
+[Done] getting local host to work with local DB for msg
+[Done] getting local host to work with local DB for img
+[Done] getting sina app engine to work on db piece
+[Done] refactoring and putting in unit test
+[Done]working to get storage bucket to work on SAE
+
+MVP
+TODO:
+MUST HAVE: updated 12/10/2015
+
+    use KeFu account to send all photos at a time (via temp content media id)
+        [Done] how to upload media
+        [DONE]setup Kefu account
+        [DONE]figure out how to send kefu msg
+        [DONE]figure out how to sending photos via Kefu and Sucai
+        add db entry for access token and expiration time
+        add code to upload Sucai and record after checking access code expiration time (if expired, get new access code and store)
+        add code to send kefu msg
+    working on extending media format to video (partly)
+    working to get sotrage buket to work with video (partly)
+    add meta data to bucket storage
+
+PHASE TWO:
+TODO:
+    Figure out what's going on with domain name
+    change all time to UTC
+
+
+
+
+* change project path so SVN and Pycharm proj. is the same
+
+NOTES:
+1) To begin using the virtual environment, it needs to be activated:
+    source venv/bin/activate
+2) If you are done working in the virtual environment for the moment, you can deactivate it:
+    deactivate
+3) SVN repo is different than this project
+
+actual data posted from wechat server:
+2015/07/19 00:54:16] - WARNING:root:in POST section with data:
+<xml><ToUserName><![CDATA[gh_bf693268132e]]></ToUserName>
+<FromUserName><![CDATA[oMwf3s4hyHHp1eKxyyiCpb8is9oQ]]></FromUserName>
+<CreateTime>1437238456</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[Abc]]></Content>
+<MsgId>6172892165281362744</MsgId>
+</xml>
+
+ - [2015/07/19 00:57:33] - WARNING:root:in POST section with data:
+<xml><ToUserName><![CDATA[gh_bf693268132e]]></ToUserName>
+<FromUserName><![CDATA[oMwf3s4hyHHp1eKxyyiCpb8is9oQ]]></FromUserName>
+<CreateTime>1437238651</CreateTime>
+<MsgType><![CDATA[image]]></MsgType>
+<PicUrl><![CDATA[http://mmbiz.qpic.cn/mmbiz/cLlBJpiaAdZM4UHb7WWEr04ibLypaMSTIS6XLw6KEFzfcmzOgjnJBicXyTmibQ2XFGY3a8QTw2yfxpibm27RgSh6NcA/0]]></PicUrl>
+<MsgId>6172893002799985471</MsgId>
+<MediaId><![CDATA[edyhcyvwg4Rvv2jLKkHylFvbFVnBXIxdBmdQQuFF3vT2WNKLXgiEmAT1EpsHBJlk]]></MediaId>
+</xml>
+
+When Receiving:
+<ToUserName> is the wechat devloper(public account) id
+<FromUserName> is the regular user's OpenID (unique to each public account, generated based on userID (private to public account) and public account id)
+
+[2015/07/19 03:46:19] - WARNING:root:in POST section with data:
+<xml><ToUserName><![CDATA[gh_bf693268132e]]></ToUserName>
+<FromUserName><![CDATA[oMwf3s4hyHHp1eKxyyiCpb8is9oQ]]></FromUserName>
+<CreateTime>1437248779</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[好天气]]></Content>
+<MsgId>6172936502228759499</MsgId>
+</xml>
+
+
+When Responding:
+<ToUserName> is the regular user's OpenID
+<FromUserName> is the wechat devloper(public account) id
+
+[2015/07/19 03:46:19] - INFO:root:responded with XML:
+<xml><ToUserName><![CDATA[oMwf3s4hyHHp1eKxyyiCpb8is9oQ]]></ToUserName><FromUserName><![CDATA[gh_bf693268132e]]></FromUserName><CreateTime>1437248779</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[好天气乔木说世界充满爱]]></Content></xml>
+
+
+Creation time: http://jingyan.baidu.com/article/359911f5097c1c57fe03068a.html
+
+save to local file system:
+# save to local file system
+# import os
+# response = urllib2.urlopen(self.input_url)
+# f = open('test.jpg','wb')
+# f.write(response.read())
+# f.close()
+# path = os.getcwd()+'/test.jpg'
+# self.stored_url = path
+
+
+Sucai:
+
+http://mp.weixin.qq.com/wiki/5/963fc70b80dc75483a271298a76a8d59.html
+
+
+Kefu:
+http://mp.weixin.qq.com/wiki/14/d9be34fe03412c92517da10a5980e7ee.html
+
+access token:
+https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx0e8510887f4eff17&secret=1e7b2f1ede267654bc8cdcd2cdef3a70
+{"access_token":"dmkd5IaDSyVIHRavi8tkM1cbldIRcfZxSGCqNzukkN0CdYT57dbMUDSbNRPNYnRKiBp9-lbEa5BNhF_nikRFQsRKKRzjUj8Ha8JiuO99nt4gUDLoVgJvw4eCmtE8imhcOXRbAGADMG","expires_in":7200}
+
+import requests
+import os
+accessToken = "Pdj6CrBMOjJRAZgFZ8GJgeXPECXiku2ZCMos_jmlfwEDCo3YwE4-jDUVOPowe-kxMKfoEQUzBKmTYXi0NKO-zDNskzRlkCBh6rZ4hhII-6PipPX_w-j7U7lctfSV0pw6HWVjADAPED"
+mediaType = "image"
+basePostURL = "https://api.weixin.qq.com/cgi-bin/media/upload?access_token=%s&type=%s" % (accessToken,mediaType)
+print basePostURL
+file_name = 'test.jpeg'
+data = {'file': open(file_name, 'rb')}
+myRequest =requests.post(basePostURL,files=data)
+print (myRequest.json())
+#   {u'media_id': u'uuCc5YjOlOGwpy5Ia4i5BiYA8PQYZk0G_plX4i-J0m0zWmGzHHFhB5VCvrfIxtw5', u'created_at': 1456924919, u'type': u'image'}
+myRequest.json()['media_id']
+#   u'uuCc5YjOlOGwpy5Ia4i5BiYA8PQYZk0G_plX4i-J0m0zWmGzHHFhB5VCvrfIxtw5'
+
+//https://segmentfault.com/q/1010000002633223/a-1020000002635825
+
+
+send Kefu message:
+https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=dmkd5IaDSyVIHRavi8tkM1cbldIRcfZxSGCqNzukkN0CdYT57dbMUDSbNRPNYnRKiBp9-lbEa5BNhF_nikRFQsRKKRzjUj8Ha8JiuO99nt4gUDLoVgJvw4eCmtE8imhcOXRbAGADMG
+
+{
+    "touser": "oMwf3s4hyHHp1eKxyyiCpb8is9oQ",
+    "msgtype": "text",
+    "text": {
+        "content": "Hello World"
+    }
+}
+
+send image with just uploaded SUCAI:
+向用户发送消息: 发送客服消息接口 /message/custom/send
+请求地址：
+https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=dmkd5IaDSyVIHRavi8tkM1cbldIRcfZxSGCqNzukkN0CdYT57dbMUDSbNRPNYnRKiBp9-lbEa5BNhF_nikRFQsRKKRzjUj8Ha8JiuO99nt4gUDLoVgJvw4eCmtE8imhcOXRbAGADMG
+返回结果:
+200	OK
+Connection: keep-alive
+Date: Sun, 13 Mar 2016 13:53:40 GMT
+Content-Type: application/json; encoding=utf-8
+Content-Length: 27
+{
+    "errcode": 0,
+    "errmsg": "ok"
+}
+
+{
+    "touser": "oMwf3s4hyHHp1eKxyyiCpb8is9oQ",
+    "msgtype": "image",
+    "image": {
+        "media_id": "S6OE82OyHCw_xEeeZZT9Li05mH-X2yWbyh9KFGcw8PolV6jlhW8Y2e4-iUAAJ16W"
+    }
+}
+
+>>> from  datetime  import  *
+>>> print   'utcnow():' , datetime.utcnow()
+utcnow(): 2016-03-17 01:26:12.023334
+dt=datetime.utcnow()
+>>> print   '(%Y-%m-%d %H:%M:%S): ' , dt.strftime( '%Y-%m-%d %H:%M:%S' )
+(%Y-%m-%d %H:%M:%S):  2016-03-17 01:31:15
+
+
+SVN:
+(venv)uid-mba:1 mqiao$ pwd
+/Users/mqiao/python-G/NewFlaskApp/wechatimg/1
+svn status
+(venv)uid-mba:1 mqiao$ svn commit -m"comments"
