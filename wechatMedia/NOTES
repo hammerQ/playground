@@ -1,0 +1,22 @@
+NOTES related to new microservice of wechatMedia
+
+Prepare:
+# Creating virtual environment
+    python3 -m venv tutorial-env
+# Activate virtual environment
+    source tutorial-env/bin/activate
+# Deactivate vitual environment
+    deactivate
+# Install packages:
+    pip install flask
+    pip install flasgger
+    pip install untangle
+
+# start flash service
+    python REMS.py
+
+# Swagger at
+    http://localhost:5000/apidocs/
+
+
+
