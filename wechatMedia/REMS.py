@@ -40,7 +40,9 @@ def api_message():
             return response
         elif request.headers['Content-Type'] == 'text/xml':  # main point of entry for wechat
             logging.info("receive data from " + request.headers["host"])
-            obj = convert_xml_to_JSON(request.data)
+            logging.info("Input XML: " + request.data)
+            JSON_obj = convert_xml_to_JSON(request.data)
+            logging.info("Input XML converted to JSON: " + JSON_obj)
             response = construct_response()
             return response
         elif request.headers['Content-Type'] == 'application/octet-stream':
