@@ -123,8 +123,8 @@ def store_msg_to_db(text_msg_dict, xml):
         except:
             con.rollback()
             logging.error("error in executing sql script" + mysql_script)
-    except mdb.Error, e:
-        print "Error %d: %s" % (e.args[0], e.args[1])
+    except mdb.Error as e:
+        print("something is not right")
 
     finally:
         if con:

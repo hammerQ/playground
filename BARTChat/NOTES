@@ -1,0 +1,15 @@
+Bart API:
+
+Example
+http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH&key=MW9S-E7SL-26DU-VV8V
+Station abbrevation:
+http://api.bart.gov/docs/overview/abbrev.aspx
+Realtime info:
+http://api.bart.gov/docs/etd/etd.aspx
+
+
+Flow:
+get input from user of starting station and ending station
+check api
+output data
+
