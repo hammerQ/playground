@@ -31,19 +31,20 @@ def api_message():
     elif request.method == 'POST':
         logging.info("in POST section with Content-Type:" + request.headers['Content-Type'])
         logging.warning("in POST section with data:" + request.data)
-        if request.headers['Content-Type'] == 'text/plain':
-            return "Text Message: " + request.data
-        elif request.headers['Content-Type'] == 'application/json':
-            return "JSON Message: " + json.dumps(request.json)
-        # elif request.headers['Content-Type'] == 'application/xml':
-        #     response = process_xml_posted(request.data)
-            return response
-        elif request.headers['Content-Type'] == 'text/xml':  # main point of entry for wechat
+
+        if request.headers['Content-Type'] == 'text/xml':  # main point of entry for wechat
             logging.info("receive data from " + request.headers["host"])
             logging.info("Input XML: " + request.data)
             JSON_obj = convert_xml_to_JSON(request.data)
             logging.info("Input XML converted to JSON: " + JSON_obj)
             response = construct_response()
+            return response
+        elif request.headers['Content-Type'] == 'text/plain':
+            return "Text Message: " + request.data
+        elif request.headers['Content-Type'] == 'application/json':
+            return "JSON Message: " + json.dumps(request.json)
+        elif request.headers['Content-Type'] == 'application/xml':
+            response = "something "  # process_xml_posted(request.data)
             return response
         elif request.headers['Content-Type'] == 'application/octet-stream':
             f = open('./binary', 'wb')
