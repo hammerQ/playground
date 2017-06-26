@@ -6,6 +6,9 @@ from flask import Flask, request, json, make_response
 from flasgger import Swagger
 import hashlib
 from .wechatXMLProcessor import WechatXMLProcessor
+from .BARTXMLprocessor import BARTXMLProcessor
+from .BartchatProperties import BARTAPI
+import urllib.request
 
 app = Flask(__name__)
 Swagger(app)
@@ -36,7 +39,7 @@ def api_message():
             logging.info("receive data from " + request.headers["host"])
             logging.info("Input XML: " + request.data)
             user_request = process_incoming_wechatXML(request.data)
-            BART_response_based_on_usr_request = make_request_2_BART(user_request)
+            BART_response_based_on_usr_request = make_request_2_BART_currentstation(user_request)
             response = construct_response(user_request, BART_response_based_on_usr_request)
             return response
         elif request.headers['Content-Type'] == 'text/plain':
@@ -83,23 +86,31 @@ def message_get(request, token):
 def process_incoming_wechatXML(xml):
     """Process the incoming wechatXML specifically for BART chat
     :param xml: incoming xml from WeChat server that contains user info ans user request
+    :return: dictionary of the incoming wechat xml
     """
-    #TODO: finish this
+    return WechatXMLProcessor.process_xml_posted(xml)
 
-def make_request_2_BART(user_request):
+def make_request_2_BART_currentstation(user_request):
     """
     make request to BART API
     :param user_request: 
     :return: xml structure from BART
     """
-
-    #TODO: finish this
+    if user_request:
+        current_station_str = user_request['content']
+        #TODO: use current station input from user
+        BART_response_xml = urllib.request.urlopen(BARTAPI.BART_EXAMPLE_REQUEST).read()
+        logging.info('BART Response XML is:' + BART_response_xml)
+        return BART_response_xml
+    else:
+        return None
 
 def construct_response(msg_info, BART_response_xml):
-    # reply = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName>" \
-    #         "<![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime>" \
-    #         "<MsgType><![CDATA[text]]></MsgType><Content><![CDATA[%s]]>" \
-    #         "</Content></xml>"
+    reply = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName>" \
+            "<![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime>" \
+            "<MsgType><![CDATA[text]]></MsgType><Content><![CDATA[%s]]>" \
+            "</Content></xml>"
+    BART_API_response_Dict = BARTXMLProcessor.process_xml_posted(BART_response_xml)
     # if wechatdata.is_image:
     #     response_xml = reply % (msg_info['fromuser_id'], msg_info['wechatimg_id'], str(int(time.time())),
     #                             service_prop.ConstantValues.ReturnTextStr_PhotoSaved)
@@ -117,6 +128,16 @@ def construct_response(msg_info, BART_response_xml):
     # logging.info("responded with xml: " + response_xml)
     response = 'response something'
     return response
+
+def determine_if_BART_has_error(BART_response_xml):
+    """
+    Determine is BART is responsing temporarily unavailable
+    :param BART_response_xml: 
+    :return: True if BART is temporarily unavailable
+    """
+    BARTXMLProcessor()
+
+
 
 if __name__ == '__main__':
     app.run()

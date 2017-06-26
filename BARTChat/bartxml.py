@@ -11,57 +11,32 @@ CONTENT = "Content"
 FROM_USER_NAME = "FromUserName"
 TO_USER_NAME = "ToUserName"
 
+STATION = 'station'
+MESSAGE = 'message'
+ERROR = 'error'
+
 __author__ = 'mqiao'
 import xml.etree.ElementTree as element_tree
 import logging
 
 
-class WechatXml ():
+class BARTXml ():
 
-    is_image = False
-    is_msg = False
-    is_video = False
-    is_request = False
+    is_temp_unavail = False
+
     xlm_content_dict = dict()
 
     def __init__(self, xml):
         self.xml = xml
-        self.is_image = False
-        self.is_msg = False
-        self.is_video = False
-        self.is_request = False
+        is_temp_unavail= False
 
-    def set_isImageTrue(self):
-        self.is_msg = False
-        self.is_image = True
-        self.is_video = False
-
-    def set_isTextTrue(self):
-        self.is_msg = True
-        self.is_image = False
-        self.is_video = False
-
-    def set_isVideoTrue(self):
-        self.is_msg = False
-        self.is_image = False
-        self.is_video = True
-
-    def determine_media_type(self):
+    def determine_BART_system_availibility(self):
         """
-        Determine if posted XML is for image or not and set the flag accordingly
+        Determine if BART system is available or not
         """
         try:
             xml_received = element_tree.fromstring(self.xml)
-            message_type = xml_received.find("MsgType").text
-            if message_type == 'image':
-                self.set_isImageTrue()
-            elif message_type == 'text':    #   request is a special type of text/msg
-                self.set_isTextTrue()
-            elif message_type == 'video':
-                self.set_isVideoTrue()
-            else:
-                logging.error("un-recognized media format " + message_type)
-                self.is_msg = False
+            self.is_temp_unavail = xml_received.find(ERROR).text
         except:
             logging.error("Error in parshing incoming xml: " + self.xml)
 

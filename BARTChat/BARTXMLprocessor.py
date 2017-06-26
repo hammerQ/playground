@@ -2,33 +2,33 @@
 # encoding: utf-8
 
 import logging
-from .wechatxml import WechatXml
+from .bartxml import BARTXml
 
 
-class WechatXMLProcessor:
+class BARTXMLProcessor:
 
     def process_xml_posted(xml):
         """
         Based on posted xml, construct the corresponding response
-        :param xml: posted xml from WeChat server
+        :param xml: posted xml from BART open API server
         :return: dictionary of incoming request
         """
 
-        wechatdata = WechatXml(xml)
-        wechatdata.determine_media_type()
+        BARTdata = BARTXml(xml)
+        BARTdata.determine_media_type()
 
-        if wechatdata.is_image:
+        if BARTdata.is_image:
             logging.info("\tReceived xml contains image")
-            wechatdata.parse_image_xml()
-        elif wechatdata.is_msg:
+            BARTdata.parse_image_xml()
+        elif BARTdata.is_msg:
             logging.info("\tReceived xml contains msg")
-            wechatdata.parse_msg_xml()
+            BARTdata.parse_msg_xml()
 
-        elif wechatdata.is_video:
+        elif BARTdata.is_video:
             logging.info("\tReceived xml contains video")
-            wechatdata.parse_video_xml()
+            BARTdata.parse_video_xml()
 
         else:
             logging.error("\tReceived other types of xml")
             return None
-        return wechatdata.xlm_content_dict
+        return BARTdata.xlm_content_dict
