@@ -38,12 +38,13 @@ class BARTXml ():
             xml_received = element_tree.fromstring(self.xml)
             self.is_temp_unavail = xml_received.find(ERROR).text
         except:
-            logging.error("Error in parshing incoming xml: " + self.xml)
+            logging.error("Error in parsing incoming xml: " + self.xml)
             self.is_temp_unavail = True
 
     def parse_xml(self):
         """ parse BART API response xml when system is available
         """
+        # TODO: figure out a better way to do xml parsing
         try:
             xml_recv = element_tree.fromstring(self.xml)
             wechatimg_id = xml_recv.find(TO_USER_NAME).text
