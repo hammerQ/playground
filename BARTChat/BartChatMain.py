@@ -35,9 +35,9 @@ def api_message():
         if request.headers['Content-Type'] == 'text/xml':  # main point of entry for wechat
             logging.info("receive data from " + request.headers["host"])
             logging.info("Input XML: " + request.data)
-            JSON_obj = convert_xml_to_JSON(request.data)
-            logging.info("Input XML converted to JSON: " + JSON_obj)
-            response = construct_response()
+            user_request = process_incoming_wechatXML(request.data)
+            BART_response_based_on_usr_request = make_request_2_BART(user_request)
+            response = construct_response(user_request, BART_response_based_on_usr_request)
             return response
         elif request.headers['Content-Type'] == 'text/plain':
             return "Text Message: " + request.data
@@ -79,16 +79,23 @@ def message_get(request, token):
         logger.info('hashcode is ' + hashcode + "ERROR, hash doesn't match")
         return make_response(echo_str)
 
-def convert_xml_to_JSON(xml):
-    """
-    convert incoming xml to JSON object for internal consumption
-    :param xml: 
-    :return: JSON response
-    """
-    obj = untangle.parse(xml)
-    return obj
 
-def construct_response(msg_info, wechatdata):
+def process_incoming_wechatXML(xml):
+    """Process the incoming wechatXML specifically for BART chat
+    :param xml: incoming xml from WeChat server that contains user info ans user request
+    """
+    #TODO: finish this
+
+def make_request_2_BART(user_request):
+    """
+    make request to BART API
+    :param user_request: 
+    :return: xml structure from BART
+    """
+
+    #TODO: finish this
+
+def construct_response(msg_info, BART_response_xml):
     # reply = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName>" \
     #         "<![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime>" \
     #         "<MsgType><![CDATA[text]]></MsgType><Content><![CDATA[%s]]>" \

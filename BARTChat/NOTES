@@ -9,7 +9,8 @@ http://api.bart.gov/docs/etd/etd.aspx
 
 
 Flow:
-get input from user of starting station and ending station
+get input from user of starting station and ending station.
+    Should use xml fomat for this
 check api
 output data
-
+    Should use xml fomat for this
