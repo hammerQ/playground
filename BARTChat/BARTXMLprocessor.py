@@ -15,20 +15,12 @@ class BARTXMLProcessor:
         """
 
         BARTdata = BARTXml(xml)
-        BARTdata.determine_media_type()
+        is_avaiable = BARTdata.determine_BART_system_availibility()
 
-        if BARTdata.is_image:
+        if is_avaiable:
             logging.info("\tReceived xml contains image")
-            BARTdata.parse_image_xml()
-        elif BARTdata.is_msg:
-            logging.info("\tReceived xml contains msg")
-            BARTdata.parse_msg_xml()
-
-        elif BARTdata.is_video:
-            logging.info("\tReceived xml contains video")
-            BARTdata.parse_video_xml()
-
+            BARTdata.parse_xml()
+            return BARTdata.xlm_content_dict
         else:
-            logging.error("\tReceived other types of xml")
+            logging.error("\tBART API is temporarily unavailable")
             return None
-        return BARTdata.xlm_content_dict
