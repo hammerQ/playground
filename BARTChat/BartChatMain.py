@@ -4,8 +4,8 @@ __author__ = 'mqiao'
 import logging
 from flask import Flask, request, json, make_response
 from flasgger import Swagger
-import untangle
 import hashlib
+from .wechatXMLProcessor import WechatXMLProcessor
 
 app = Flask(__name__)
 Swagger(app)
