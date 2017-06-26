@@ -8,3 +8,4 @@ import untangle
 xml = '<?xml version="1.0"?><root><child name="child1"/></root>'
 obj = untangle.parse(xml)
 print("JSON is " + obj.root.child['name']) # 'child1'
+print("JSON is " + obj.root.child) # 'child1'

@@ -39,28 +39,10 @@ class BARTXml ():
             self.is_temp_unavail = xml_received.find(ERROR).text
         except:
             logging.error("Error in parshing incoming xml: " + self.xml)
+            self.is_temp_unavail = True
 
-    def parse_image_xml(self):
-        """ parse WeChat picture xml
-        """
-        try:
-            xml_received = element_tree.fromstring(self.xml)
-            wechatimg_id = xml_received.find(TO_USER_NAME).text
-            fromuser_id = xml_received.find(FROM_USER_NAME).text
-            create_time = xml_received.find(CREATE_TIME).text
-            message_type = xml_received.find(MSG_TYPE).text
-            picture_url = xml_received.find(PIC_URL).text
-            message_id = xml_received.find(MSG_ID).text
-            media_id = xml_received.find(MEDIA_ID).text
-            logging.info("received picture: "+picture_url)
-            self.xlm_content_dict = dict([('wechatimg_id', wechatimg_id), ('fromuser_id', fromuser_id),
-                                     ('create_time', create_time), ('picture_url', picture_url), ('message_id', message_id),
-                                     ('media_id', media_id), ('message_type', message_type)])
-        except:
-            logging.error("Error in parshing incoming XML: " + self.xml)
-
-    def parse_msg_xml(self):
-        """ parse WeChat msg xml
+    def parse_xml(self):
+        """ parse BART API response xml when system is available
         """
         try:
             xml_recv = element_tree.fromstring(self.xml)
@@ -76,22 +58,3 @@ class BARTXml ():
         self.xlm_content_dict = dict([('wechatimg_id', wechatimg_id), ('fromuser_id', fromuser_id),
                                       ('create_time', create_time), ('message_id', message_id),
                                       ('message_type', message_type), ('content', content)])
-
-    def parse_video_xml(self):
-        """ parse WeChat video xml
-        """
-        try:
-            xml_recv = element_tree.fromstring(self.xml)
-            wechatimg_id = xml_recv.find(TO_USER_NAME).text
-            fromuser_id = xml_recv.find(FROM_USER_NAME).text
-            create_time = xml_recv.find(CREATE_TIME).text
-            message_type = xml_recv.find(MSG_TYPE).text  # should be "video"
-            media_id = xml_recv.find(MEDIA_ID).text # used to pull down video data
-            video_thumb = xml_recv.find("ThumbMediaId").text    # thumbnail for the video
-
-        except:
-            logging.error("Error in parsing incoming XML: " + self.xml)
-
-        self.xlm_content_dict = dict([('wechatimg_id', wechatimg_id), ('fromuser_id', fromuser_id),
-                                      ('create_time', create_time), ('video_thumb', video_thumb),
-                                      ('message_type', message_type), ('media_id', media_id)])
