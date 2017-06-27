@@ -30,6 +30,9 @@ class BARTXml ():
         self.xml = xml
         is_temp_unavail= False
 
+    def get_is_temp_unavail(self):
+        return self.is_temp_unavail
+
     def determine_BART_system_availibility(self):
         """
         Determine if BART system is available or not
@@ -37,6 +40,10 @@ class BARTXml ():
         try:
             xml_received = element_tree.fromstring(self.xml)
             self.is_temp_unavail = xml_received.find(ERROR).text
+            if self.is_temp_unavail is None:
+                self.is_temp_unavail = False
+            else:
+                self.is_temp_unavail = True
         except:
             logging.info("Error in parsing incoming xml: " + self.xml)
             self.is_temp_unavail = True
