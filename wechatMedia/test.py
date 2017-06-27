@@ -4,9 +4,9 @@
 __author__ = 'mqiao'
 
 import unittest
-from wechatxml import WechatXml
-from wechatimgdb import Wechat_Database
-from wechatimgstorage import WechatStorage
+from .wechatxml import WechatXml
+from .wechatimgdb import Wechat_Database
+from .wechatimgstorage import WechatStorage
 import properties
 
 

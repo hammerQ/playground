@@ -38,7 +38,7 @@ class BARTXml ():
             xml_received = element_tree.fromstring(self.xml)
             self.is_temp_unavail = xml_received.find(ERROR).text
         except:
-            logging.error("Error in parsing incoming xml: " + self.xml)
+            logging.info("Error in parsing incoming xml: " + self.xml)
             self.is_temp_unavail = True
 
     def parse_xml(self):
