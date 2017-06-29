@@ -1,14 +1,16 @@
 # This Python file uses the following encoding: utf-8
 # encoding: utf-8
 __author__ = 'mqiao'
-import logging
-from flask import Flask, request, json, make_response
-from flasgger import Swagger
 import hashlib
-from .wechatXMLProcessor import WechatXMLProcessor
+import logging
+import urllib.request
+
+from flasgger import Swagger
+from flask import Flask, request, json, make_response
+
+from Tools.wechatXMLProcessor import WechatXMLProcessor
 from .BARTXMLprocessor import BARTXMLProcessor
 from .BartchatProperties import BARTAPI
-import urllib.request
 
 app = Flask(__name__)
 Swagger(app)

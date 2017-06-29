@@ -2,7 +2,8 @@
 # encoding: utf-8
 
 import logging
-from .wechatxml import WechatXml
+
+from Tools.wechatxml import WechatXml
 
 
 class WechatXMLProcessor:

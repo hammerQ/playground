@@ -1,6 +1,10 @@
 # This Python file uses the following encoding: utf-8
 # encoding: utf-8
 
+import logging
+from lxml import etree
+__author__ = 'mqiao'
+
 # tags in xml
 MEDIA_ID = "MediaId"
 PIC_URL = "PicUrl"
@@ -15,9 +19,6 @@ STATION = 'station'
 MESSAGE = 'message'
 ERROR = 'error'
 
-__author__ = 'mqiao'
-import xml.etree.ElementTree as element_tree
-import logging
 
 
 class BARTXml ():
@@ -38,8 +39,8 @@ class BARTXml ():
         Determine if BART system is available or not
         """
         try:
-            xml_received = element_tree.fromstring(self.xml)
-            self.is_temp_unavail = xml_received.find(ERROR).text
+            xml_received = etree.fromstring(self.xml)
+            self.is_temp_unavail = xml_received.findtext(ERROR)
             if self.is_temp_unavail is None:
                 self.is_temp_unavail = False
             else:
@@ -53,13 +54,13 @@ class BARTXml ():
         """
         # TODO: figure out a better way to do xml parsing
         try:
-            xml_recv = element_tree.fromstring(self.xml)
-            wechatimg_id = xml_recv.find(TO_USER_NAME).text
-            fromuser_id = xml_recv.find(FROM_USER_NAME).text
-            content = xml_recv.find(CONTENT).text
-            create_time = xml_recv.find(CREATE_TIME).text
-            message_id = xml_recv.find(MSG_ID).text
-            message_type = xml_recv.find(MSG_TYPE).text
+            xml_recv_root = etree.fromstring(self.xml)
+            wechatimg_id = xml_recv_root.find(TO_USER_NAME).text
+            fromuser_id = xml_recv_root.find(FROM_USER_NAME).text
+            content = xml_recv_root.find(CONTENT).text
+            create_time = xml_recv_root.find(CREATE_TIME).text
+            message_id = xml_recv_root.find(MSG_ID).text
+            message_type = xml_recv_root.find(MSG_TYPE).text
         except:
             logging.error("Error in parshing incoming XML: " + self.xml)
 
