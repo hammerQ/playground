@@ -15,7 +15,7 @@ class BARTXMLProcessor:
         """
 
         BARTdata = BARTXml(xml)
-        is_avaiable = BARTdata.determine_BART_system_availibility()
+        is_avaiable = BARTdata.determine_bart_system_availibility()
 
         if is_avaiable:
             logging.info("\tReceived xml contains image")

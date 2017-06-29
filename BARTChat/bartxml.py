@@ -3,6 +3,8 @@
 
 import logging
 from lxml import etree
+
+BART_ERROR_MSG = 'Updates are temporarily unavailable.'
 __author__ = 'mqiao'
 
 # tags in xml
@@ -29,19 +31,19 @@ class BARTXml ():
         self.xml = xml
         self.is_BART_system_available = True
 
-    def get_is_BART_avail(self):
+    def get_is_bart_avail(self):
         return self.is_BART_system_available
 
-    def determine_BART_system_availibility(self):
+    def determine_bart_system_availibility(self):
         """
         Determine if BART system is available or not
         """
         error_counts = 0
         try:
             xml_received = etree.fromstring(self.xml)
-            for element in xml_received.iter("error"):
+            for element in xml_received.iter(ERROR):
                 error_counts += 1
-                if element.text == 'Updates are temporarily unavailable.':
+                if element.text == BART_ERROR_MSG:
                     self.is_BART_system_available = False
                 else:
                     logging.info("other error detected in BART response xml: " + element.text)
