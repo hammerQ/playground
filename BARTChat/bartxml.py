@@ -23,31 +23,32 @@ ERROR = 'error'
 
 class BARTXml ():
 
-    is_temp_unavail = False
-
     xlm_content_dict = dict()
 
     def __init__(self, xml):
         self.xml = xml
-        is_temp_unavail= False
+        self.is_BART_system_available = True
 
-    def get_is_temp_unavail(self):
-        return self.is_temp_unavail
+    def get_is_BART_avail(self):
+        return self.is_BART_system_available
 
     def determine_BART_system_availibility(self):
         """
         Determine if BART system is available or not
         """
+        error_counts = 0
         try:
             xml_received = etree.fromstring(self.xml)
-            self.is_temp_unavail = xml_received.findtext(ERROR)
-            if self.is_temp_unavail is None:
-                self.is_temp_unavail = False
-            else:
-                self.is_temp_unavail = True
+            for element in xml_received.iter("error"):
+                error_counts += 1
+                if element.text == 'Updates are temporarily unavailable.':
+                    self.is_BART_system_available = False
+                else:
+                    logging.info("other error detected in BART response xml: " + element.text)
+                    self.is_BART_system_available = False
         except:
             logging.info("Error in parsing incoming xml: " + self.xml)
-            self.is_temp_unavail = True
+            self.is_BART_system_available = False
 
     def parse_xml(self):
         """ parse BART API response xml when system is available
