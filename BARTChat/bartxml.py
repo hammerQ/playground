@@ -38,11 +38,9 @@ class BARTXml ():
         """
         Determine if BART system is available or not
         """
-        error_counts = 0
         try:
             xml_received = etree.fromstring(self.xml)
             for element in xml_received.iter(ERROR):
-                error_counts += 1
                 if element.text == BART_ERROR_MSG:
                     self.is_BART_system_available = False
                 else:
@@ -55,18 +53,24 @@ class BARTXml ():
     def parse_xml(self):
         """ parse BART API response xml when system is available
         """
-        # TODO: figure out a better way to do xml parsing
         try:
             xml_recv_root = etree.fromstring(self.xml)
-            wechatimg_id = xml_recv_root.find(TO_USER_NAME).text
-            fromuser_id = xml_recv_root.find(FROM_USER_NAME).text
-            content = xml_recv_root.find(CONTENT).text
-            create_time = xml_recv_root.find(CREATE_TIME).text
-            message_id = xml_recv_root.find(MSG_ID).text
-            message_type = xml_recv_root.find(MSG_TYPE).text
+            station_name_element = xml_recv_root.find('station/name')
+            logging.info("station Name tag: " + station_name_element.tag)
+            logging.info("Station Name text: " + station_name_element.text)
+
+            if type(station_name_element) is None:
+                logging.error("None station name in return BART xml" + self.xml)
+                station_name_str = "None"
+            else:
+                station_name_str = station_name_element.text  # there should be just one station
+            # station_name_abbr_str = xml_recv_root.findall('station/abbr').text
+
+
         except:
             logging.error("Error in parshing incoming XML: " + self.xml)
+            station_name_str = "None"
 
-        self.xlm_content_dict = dict([('wechatimg_id', wechatimg_id), ('fromuser_id', fromuser_id),
-                                      ('create_time', create_time), ('message_id', message_id),
-                                      ('message_type', message_type), ('content', content)])
+        self.xlm_content_dict = dict([('station_name', station_name_str)])
+        # self.xlm_content_dict = dict([('station_name', station_name_str), ('station_name_abbr', station_name_abbr_str)])
+        return self.xlm_content_dict

@@ -9,7 +9,6 @@ from bartxml import BARTXml
 from lxml import etree
 
 class BartXMLTest(unittest.TestCase):
-
     def test(self):
         self.assertTrue(True)
 
@@ -37,3 +36,22 @@ class BartXMLTest(unittest.TestCase):
         BARTdata = BARTXml(system_unavaiable_xml)
         BARTdata.determine_bart_system_availibility()
         self.assertFalse(BARTdata.get_is_bart_avail())
+
+    def testBARTParsing_StationName(self):
+        valid_response_xml = '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH]]></uri><date>06/27/2017</date><time>03:38:31 PM PDT</time><station><name>Richmond</name><abbr>RICH</abbr><etd><destination>Fremont</destination><abbreviation>FRMT</abbreviation><limited>0</limited><estimate><minutes>10</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>25</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>40</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate></etd><etd><destination>Millbrae</destination><abbreviation>MLBR</abbreviation><limited>0</limited><estimate><minutes>3</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>18</minutes><platform>2</platform><direction>South</direction><length>9</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>33</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate></etd></station><message></message></root>'
+        BARTdata = BARTXml(valid_response_xml)
+        result_dict = BARTdata.parse_xml()
+        self.assertEqual(result_dict['station_name'], 'Richmond', 'Station is not correct')
+
+    # def testBARTParsing_StationName_notinxml(self):
+    #     valid_response_xml_nostation = '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH]]></uri><date>06/27/2017</date><time>03:38:31 PM PDT</time><station><etd><destination>Fremont</destination><abbreviation>FRMT</abbreviation><limited>0</limited><estimate><minutes>10</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>25</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>40</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate></etd><etd><destination>Millbrae</destination><abbreviation>MLBR</abbreviation><limited>0</limited><estimate><minutes>3</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>18</minutes><platform>2</platform><direction>South</direction><length>9</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>33</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate></etd></station><message></message></root>'
+    #     BARTdata = BARTXml(valid_response_xml_nostation)
+    #     result_dict = BARTdata.parse_xml()
+    #     self.assertEqual(result_dict['station_name'], 'None', 'Station is not correct')
+    #
+    #
+    # def testBARTParsing_StationNameAbbr(self):
+    #     valid_response_xml = '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH]]></uri><date>06/27/2017</date><time>03:38:31 PM PDT</time><station><name>Richmond</name><abbr>RICH</abbr><etd><destination>Fremont</destination><abbreviation>FRMT</abbreviation><limited>0</limited><estimate><minutes>10</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>25</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>40</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate></etd><etd><destination>Millbrae</destination><abbreviation>MLBR</abbreviation><limited>0</limited><estimate><minutes>3</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>18</minutes><platform>2</platform><direction>South</direction><length>9</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>33</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate></etd></station><message></message></root>'
+    #     BARTdata = BARTXml(valid_response_xml)
+    #     result_dict = BARTdata.parse_xml()
+    #     self.assertEqual(result_dict['station_name_abbr'], 'RICH', 'Station abbr is not correct')

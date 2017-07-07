@@ -11,29 +11,34 @@ unavialbexml = '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&ori
 system_avaiable_xml = '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH]]></uri><date>06/27/2017</date><time>03:38:31 PM PDT</time><station><name>Richmond</name><abbr>RICH</abbr><etd><destination>Fremont</destination><abbreviation>FRMT</abbreviation><limited>0</limited><estimate><minutes>10</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>25</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>40</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate></etd><etd><destination>Millbrae</destination><abbreviation>MLBR</abbreviation><limited>0</limited><estimate><minutes>3</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>18</minutes><platform>2</platform><direction>South</direction><length>9</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>33</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate></etd></station><message></message></root>'
 another_xml= '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH]]></uri><date>06/27/2017</date><time>03:38:31 PM PDT</time><station><name>Richmond</name><abbr>RICH</abbr><etd><destination>Fremont</destination><abbreviation>FRMT</abbreviation><limited>0</limited><estimate><minutes>10</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>25</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>40</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate></etd><etd><destination>Millbrae</destination><abbreviation>MLBR</abbreviation><limited>0</limited><estimate><minutes>3</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>18</minutes><platform>2</platform><direction>South</direction><length>9</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>33</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><error>#ff0000</error><bikeflag>1</bikeflag></estimate></etd></station><message></message></root>'
 
-root_unavailable = etree.fromstring(another_xml)
+valid_response_xml = '<root><uri><![CDATA[http://api.bart.gov/api/etd.aspx?cmd=etd&orig=RICH]]></uri><date>06/27/2017</date><time>03:38:31 PM PDT</time><station><name>Richmond</name><abbr>RICH</abbr><etd><destination>Fremont</destination><abbreviation>FRMT</abbreviation><limited>0</limited><estimate><minutes>10</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>25</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>40</minutes><platform>2</platform><direction>South</direction><length>6</length><color>ORANGE</color><hexcolor>#ff9933</hexcolor><bikeflag>1</bikeflag></estimate></etd><etd><destination>Millbrae</destination><abbreviation>MLBR</abbreviation><limited>0</limited><estimate><minutes>3</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>18</minutes><platform>2</platform><direction>South</direction><length>9</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate><estimate><minutes>33</minutes><platform>2</platform><direction>South</direction><length>10</length><color>RED</color><hexcolor>#ff0000</hexcolor><bikeflag>1</bikeflag></estimate></etd></station><message></message></root>'
 
-# print(etree.tostring(root))
-# print(etree.tostring(root, pretty_print=True))
+xml_recv_root = etree.fromstring(valid_response_xml)
+station_name_list = xml_recv_root.findall('station')
 
-print("unavaiable:\n")
-for element in root_unavailable.iter():
-    print("\ttag is %s - text is %s" % (element.tag, element.text))
-
-for element in root_unavailable.iter("error"):
-    print("\tFound error tag is %s - text is %s" % (element.tag, element.text))
-
-print(len(root_unavailable.findall("error")))
-
-for element in root_unavailable.iter("error"):
-    if element.text == 'Updates are temporarily unavailable.':
-        is_temp_unavail = True
-        print("found error with right text")
-    else:
-        print("other error detected in BART response xml: " + element.text)
-        is_temp_unavail = True
-
-print(is_temp_unavail)
+# root_unavailable = etree.fromstring(another_xml)
+#
+# # print(etree.tostring(root))
+# # print(etree.tostring(root, pretty_print=True))
+#
+# print("unavaiable:\n")
+# for element in root_unavailable.iter():
+#     print("\ttag is %s - text is %s" % (element.tag, element.text))
+#
+# for element in root_unavailable.iter("error"):
+#     print("\tFound error tag is %s - text is %s" % (element.tag, element.text))
+#
+# print(len(root_unavailable.findall("error")))
+#
+# for element in root_unavailable.iter("error"):
+#     if element.text == 'Updates are temporarily unavailable.':
+#         is_temp_unavail = True
+#         print("found error with right text")
+#     else:
+#         print("other error detected in BART response xml: " + element.text)
+#         is_temp_unavail = True
+#
+# print(is_temp_unavail)
 
 # print("\navaiable:\n")
 # root_anvaiable = etree.fromstring(system_avaiable_xml)
